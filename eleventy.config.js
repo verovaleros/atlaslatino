@@ -2,17 +2,23 @@ import { FIELD_LABELS } from "./src/_data/fields.js";
 import { TYPE_LABELS } from "./src/_data/types.js";
 import { invaderSvg } from "./src/_lib/invader.js";
 
-// Repo-name placeholder for GitHub Pages project sites, which are
-// served from https://<user>.github.io/<repo>/ — every internal URL
-// needs this prefix. Change this (and the matching values in
-// .github/workflows/deploy.yml and README.md) to your actual repo
-// name before your first deploy. Leave as "/" for local dev; the
-// build script below only applies the prefix in production builds.
-export const PATH_PREFIX = "/atlaslatino/";
+// GitHub Pages project sites without a custom domain are served from
+// https://<user>.github.io/<repo>/, which needs every internal URL
+// prefixed with the repo name. Once a custom domain (CNAME file) is
+// attached, GitHub Pages always serves from the domain root instead,
+// regardless of repo name — so PATH_PREFIX must be "/" in that case,
+// not the repo name. This site uses a custom domain (atlaslatino.org),
+// hence "/" here. If the custom domain is ever removed, this needs to
+// go back to "/<repo-name>/" or every internal link breaks.
+export const PATH_PREFIX = "/";
 
 export default function (eleventyConfig) {
   // Static passthroughs.
   eleventyConfig.addPassthroughCopy("src/css");
+  // CNAME must land at the output root as-is (no templating) for GitHub
+  // Pages to recognize the custom domain. Copied from the repo root, not
+  // src/, since it isn't part of the site's own content tree.
+  eleventyConfig.addPassthroughCopy("CNAME");
 
   // Human-readable label for a field slug, e.g. {{ "machine-learning" | fieldLabel }}
   eleventyConfig.addFilter("fieldLabel", (slug) => FIELD_LABELS[slug] ?? slug);

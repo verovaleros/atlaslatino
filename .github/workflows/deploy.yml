@@ -11,10 +11,11 @@ name: Deploy
 #
 # Before this works on a real repo:
 #   1. In repo Settings → Pages, set "Source" to "GitHub Actions".
-#   2. In eleventy.config.js, change PATH_PREFIX from the placeholder
-#      "/atlaslatino/" to "/<your-actual-repo-name>/" (GitHub Pages
-#      project sites are served from https://<user>.github.io/<repo>/,
-#      and every internal URL needs to match that prefix).
+#   2. Set PATH_PREFIX in eleventy.config.js to match how the site is
+#      served. This repo uses a custom domain (see CNAME), so it's "/".
+#      If you fork this WITHOUT a custom domain, GitHub Pages serves
+#      from https://<user>.github.io/<repo>/ instead, and PATH_PREFIX
+#      needs to be "/<repo-name>/" or every internal link breaks.
 
 on:
   push:
