@@ -1,6 +1,6 @@
 ---
 title: "North Korea's Zoo: Poaching for Gophers, Armadillos and RATs"
-date: "2026-08-08"
+date: "2026-08-07"
 people:
   - ar-mauro-eldritch
 event: malware-village-defcon-2026

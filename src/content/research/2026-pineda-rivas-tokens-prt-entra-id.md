@@ -1,6 +1,6 @@
 ---
 title: "Tokens and PRT: Advanced Attacks and Persistence in Microsoft Entra ID"
-date: "2026-08-08"
+date: "2026-08-07"
 people:
   - pa-elzer-pineda
   - pa-jose-manuel-rivas

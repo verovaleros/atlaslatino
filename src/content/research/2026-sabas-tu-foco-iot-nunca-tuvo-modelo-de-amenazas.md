@@ -1,6 +1,6 @@
 ---
 title: "Tu foco IoT nunca tuvo modelo de amenazas"
-date: "2026-08-08"
+date: "2026-08-09"
 people:
   - mx-andres-sabas
 event: la-villa-hacker-defcon-2026

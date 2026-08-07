@@ -1,12 +1,12 @@
 ---
 title: "De la nube a la corona: Uso indebido de la identidad híbrida en Azure DevOps Azure, AD, AWS y EKS"
-date: "2026-08-08"
+date: "2026-08-07"
 people:
   - co-juan-camilo-palacio
   - co-andres-restrepo
 event: la-villa-hacker-defcon-2026
 field: offensive-security
-type: talk
+type: workshop
 links:
   - label: Speaker page (Juan Camilo Palacio)
     url: https://lavillahacker.com/team/juan-camilo-palacio/

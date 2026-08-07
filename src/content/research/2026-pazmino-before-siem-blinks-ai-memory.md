@@ -5,7 +5,7 @@ people:
   - ec-luis-pazmino
 event: la-villa-hacker-defcon-2026
 field: ai-security
-type: training
+type: workshop
 links:
   - label: View official session
     url: https://lavillahacker.com/team/luis-pazmino/

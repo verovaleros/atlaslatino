@@ -1,6 +1,6 @@
 ---
 title: "El regreso de Sedinho: situación actual y nuevas tácticas de los troyanos bancarios brasileños"
-date: "2026-08-08"
+date: "2026-08-07"
 people:
   - mx-josep-albors
 event: la-villa-hacker-defcon-2026

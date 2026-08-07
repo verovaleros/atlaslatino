@@ -1,6 +1,6 @@
 ---
 title: "O Lado Sombrio das Coisas: Transformando Dispositivos DIY em Vetores de Ataque"
-date: "2026-08-08"
+date: "2026-08-07"
 people:
   - br-christiane-borges-santos
 event: la-villa-hacker-defcon-2026

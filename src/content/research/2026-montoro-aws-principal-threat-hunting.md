@@ -5,7 +5,7 @@ people:
   - br-rodrigo-montoro
 event: bsides-las-vegas-2026
 field: incident-response
-type: training
+type: workshop
 links:
   - label: View official session
     url: https://bsideslv.org/talks#11f14b4a-9206-bfe2-9098-715c605380b9

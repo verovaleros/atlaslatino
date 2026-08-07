@@ -1,6 +1,6 @@
 ---
 title: "Learning Deception by Doing: Attacking and Defending"
-date: "2026-08-07"
+date: "2026-08-08"
 people:
   - ar-fede-pacheco
   - ar-diego-staino

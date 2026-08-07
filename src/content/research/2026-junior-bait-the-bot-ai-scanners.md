@@ -1,6 +1,6 @@
 ---
 title: "Bait the Bot: Hacking Back Autonomous AI Vulnerability Scanners"
-date: "2026-08-08"
+date: "2026-08-09"
 people:
   - br-alcyon-junior
 event: la-villa-hacker-defcon-2026

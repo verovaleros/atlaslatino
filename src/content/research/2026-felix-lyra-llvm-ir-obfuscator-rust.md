@@ -1,6 +1,6 @@
 ---
 title: "Lyra: An LLVM IR Obfuscator for Rust"
-date: "2026-08-08"
+date: "2026-08-07"
 people:
   - br-rafael-felix
 event: malware-village-defcon-2026
