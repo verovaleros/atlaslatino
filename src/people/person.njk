@@ -1,0 +1,77 @@
+---
+pagination:
+  data: people
+  size: 1
+  alias: person
+permalink: "/people/{{ person.slug }}/"
+layout: base.njk
+eleventyComputed:
+  title: "{{ person.data.name }}"
+  description: "{{ person.data.name }} on AtlasLatino."
+---
+{% set hidePerson = true %}
+<div class="person-head">
+  <div class="person-rail">
+    <span class="person-photo person-photo--invader">{{ person.slug | invader | safe }}</span>
+    <div class="rail-label">Researcher</div>
+  </div>
+  <div>
+    <h1>{{ person.data.name }}</h1>
+    {% if person.data.affiliation %}
+      <p class="person-meta">{{ person.data.affiliation }}</p>
+    {% endif %}
+    {% if person.data.city or person.data.country %}
+      <p class="person-meta">
+        {%- if person.data.city -%}
+          {{ person.data.city }}, {{ person.data.country }}
+        {%- else -%}
+          {{ person.data.country }}
+        {%- endif -%}
+        {%- if person.data.currentCountry and person.data.currentCountry != person.data.country %} → {{ person.data.currentCountry }}{% endif -%}
+      </p>
+    {% endif %}
+
+    {% if person.data.links %}
+      <p class="person-links">
+        {% if person.data.links.website %}<a href="{{ person.data.links.website }}">Website</a>{% endif %}
+        {% if person.data.links.orcid %}<a href="{{ person.data.links.orcid }}">ORCID</a>{% endif %}
+        {% if person.data.links.scholar %}<a href="{{ person.data.links.scholar }}">Google Scholar</a>{% endif %}
+        {% if person.data.links.github %}<a href="{{ person.data.links.github }}">GitHub</a>{% endif %}
+        {% if person.data.links.mastodon %}<a href="{{ person.data.links.mastodon }}">Mastodon</a>{% endif %}
+        {% if person.data.links.linkedin %}<a href="{{ person.data.links.linkedin }}">LinkedIn</a>{% endif %}
+        {% if person.data.links.bluesky %}<a href="{{ person.data.links.bluesky }}">Bluesky</a>{% endif %}
+        {% if person.data.links.x %}<a href="{{ person.data.links.x }}">X</a>{% endif %}
+      </p>
+    {% endif %}
+  </div>
+</div>
+
+{% if person.body %}
+  <div class="prose">
+    <div class="rail-label">Bio</div>
+    <div class="prose-body">
+      {{ person.body | safe }}
+    </div>
+  </div>
+{% endif %}
+
+{% set personResearch = relations.researchByPerson[person.slug] %}
+<div class="section-bar">
+  <div class="rail-label">Index</div>
+  <h2 class="section-title">
+    Research
+    {% if personResearch and personResearch.length %}
+      <span class="count">— {{ personResearch.length }} {{ "entry" if personResearch.length == 1 else "entries" }}</span>
+    {% endif %}
+  </h2>
+</div>
+
+{% if personResearch and personResearch.length %}
+  <ul class="feed">
+    {% for entry in personResearch %}
+      {% include "feed-item.njk" %}
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty-note">No research entries yet for {{ person.data.name }}.</p>
+{% endif %}

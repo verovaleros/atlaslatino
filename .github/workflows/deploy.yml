@@ -1,0 +1,73 @@
+name: Deploy
+
+# Deploys the site to GitHub Pages on every push to main.
+#
+# Validates before building, same as ci.yml does for pull requests. This
+# matters here too, not just in CI: a merge can land on main with a
+# broken cross-reference (a PR that individually validated, but a later
+# PR removed the person/event it pointed to) even if every PR passed its
+# own CI run. Without this step that state would build and deploy
+# silently degraded pages; with it, deploy fails loudly instead.
+#
+# Before this works on a real repo:
+#   1. In repo Settings → Pages, set "Source" to "GitHub Actions".
+#   2. In eleventy.config.js, change PATH_PREFIX from the placeholder
+#      "/atlaslatino/" to "/<your-actual-repo-name>/" (GitHub Pages
+#      project sites are served from https://<user>.github.io/<repo>/,
+#      and every internal URL needs to match that prefix).
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate content
+        run: pnpm run validate
+
+      - name: Build site
+        run: pnpm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

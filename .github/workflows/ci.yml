@@ -1,0 +1,43 @@
+name: CI
+
+# Runs on every pull request targeting main: installs dependencies,
+# validates content, and builds the site. Fails the PR if either step
+# fails (both exit non-zero on failure).
+
+on:
+  pull_request:
+    branches:
+      - main
+
+# This job only needs to read the code. Declaring it explicitly avoids
+# inheriting a broader repository default.
+permissions:
+  contents: read
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # pnpm-lock.yaml is committed, so --frozen-lockfile keeps CI
+      # honest about the exact dependency versions used locally.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate content
+        run: pnpm run validate
+
+      - name: Build site
+        run: pnpm run build
