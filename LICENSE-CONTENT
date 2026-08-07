@@ -1,0 +1,11 @@
+The content in this repository (the people, event, and research entries
+under src/content/, i.e. bios, affiliations, and research descriptions)
+is licensed under the Creative Commons Attribution 4.0 International
+License (CC BY 4.0).
+
+To view a copy of this license, visit
+https://creativecommons.org/licenses/by/4.0/
+
+This applies to the directory data itself. The site's code (templates,
+stylesheets, and build/validation scripts) is licensed separately under
+the MIT License — see LICENSE.
