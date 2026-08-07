@@ -1,0 +1,31 @@
+---
+pagination:
+  data: browsePages.fieldPages
+  size: 1
+  alias: fp
+permalink: "{{ fp.url }}"
+layout: base.njk
+eleventyComputed:
+  title: "{{ fp.label }}{% if fp.pageNumber > 0 %} · Page {{ fp.pageNumber | plus1 }}{% endif %}"
+  description: "Research tagged {{ fp.label }} on AtlasLatino."
+---
+<h1 class="visually-hidden">{{ fp.label }} research{% if fp.pageNumber > 0 %}, page {{ fp.pageNumber | plus1 }}{% endif %}</h1>
+
+<div class="section-bar">
+  <div class="rail-label">Field</div>
+  <h2 class="section-title">
+    {{ fp.label }}
+    <span class="count">— {{ fp.totalEntries }} {{ "entry" if fp.totalEntries == 1 else "entries" }}</span>
+  </h2>
+  <div class="intro-links">
+    <a href="{{ '/browse/' | url }}">← All filters</a>
+  </div>
+</div>
+
+<ul class="feed">
+  {% for entry in fp.pageEntries %}
+    {% include "feed-item.njk" %}
+  {% endfor %}
+</ul>
+
+{% include "browse-pager.njk" %}

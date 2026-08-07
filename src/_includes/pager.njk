@@ -1,0 +1,29 @@
+{#
+  Prev/next pagination links for any paginated page. Reads Eleventy's
+  `pagination` object directly, so this works on any template that sets
+  `pagination:` in its frontmatter — currently just the home feed
+  (src/index.njk), but written generically in case a filter page or
+  another feed needs the same control later.
+
+  Plain <a> links to static pages, no JS: "keep it fast" at high content
+  volume means not shipping a client-side pager that has to know how
+  many pages exist — the static build already knows, so it just prints
+  the right hrefs at build time.
+#}
+{% if pagination.pages.length > 1 %}
+  <nav class="pager" aria-label="Feed pages">
+    {% if pagination.href.previous %}
+      <a class="pager-link pager-prev" href="{{ pagination.href.previous | url }}">← Newer</a>
+    {% else %}
+      <span class="pager-link pager-disabled">← Newer</span>
+    {% endif %}
+
+    <span class="pager-position">Page {{ pagination.pageNumber | plus1 }} of {{ pagination.pages.length }}</span>
+
+    {% if pagination.href.next %}
+      <a class="pager-link pager-next" href="{{ pagination.href.next | url }}">Older →</a>
+    {% else %}
+      <span class="pager-link pager-disabled">Older →</span>
+    {% endif %}
+  </nav>
+{% endif %}

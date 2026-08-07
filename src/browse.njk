@@ -1,0 +1,65 @@
+---
+layout: base.njk
+title: Browse
+description: "Browse AtlasLatino by field, type, or country."
+permalink: "/browse/"
+---
+<h1 class="visually-hidden">Browse</h1>
+
+{#
+  One list per axis, each entry just a count and a link to that filter's
+  first page — no combining filters (single-axis only, see
+  src/_data/browsePages.js), so this hub is the one place all three
+  axes are visible together.
+
+  Fields and types come from their fixed lists (fields.js/types.js) so
+  the order here matches how they appear everywhere else on the site.
+  Countries are alphabetical, not sorted by count — same reasoning as
+  the stats page: these aren't competing entities, so nothing here
+  should read as a ranking.
+#}
+
+<div class="section-bar">
+  <div class="rail-label">Browse</div>
+  <h2 class="section-title">By field</h2>
+</div>
+<ul class="browse-list">
+  {% for fp in browsePages.fieldPages %}
+    {% if fp.pageNumber == 0 %}
+      <li>
+        <a href="{{ fp.url | url }}">{{ fp.label }}</a>
+        <span class="browse-count">{{ fp.totalEntries }}</span>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>
+
+<div class="section-bar">
+  <div class="rail-label">Browse</div>
+  <h2 class="section-title">By type</h2>
+</div>
+<ul class="browse-list">
+  {% for fp in browsePages.typePages %}
+    {% if fp.pageNumber == 0 %}
+      <li>
+        <a href="{{ fp.url | url }}">{{ fp.label }}</a>
+        <span class="browse-count">{{ fp.totalEntries }}</span>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>
+
+<div class="section-bar">
+  <div class="rail-label">Browse</div>
+  <h2 class="section-title">By country</h2>
+</div>
+<ul class="browse-list">
+  {% for fp in browsePages.countryPages %}
+    {% if fp.pageNumber == 0 %}
+      <li>
+        <a href="{{ fp.url | url }}">{{ fp.label }}</a>
+        <span class="browse-count">{{ fp.totalEntries }}</span>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

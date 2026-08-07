@@ -1,0 +1,23 @@
+{#
+  Prev/next links for the precomputed filter pages (field/type/country),
+  which paginate over src/_data/browsePages.js rather than Eleventy's
+  native `pagination` object — see that file for why. Expects `fp` in
+  scope (set by the including template's own pagination alias).
+#}
+{% if fp.totalPages > 1 %}
+  <nav class="pager" aria-label="{{ fp.label }} pages">
+    {% if fp.prevUrl %}
+      <a class="pager-link pager-prev" href="{{ fp.prevUrl | url }}">← Newer</a>
+    {% else %}
+      <span class="pager-link pager-disabled">← Newer</span>
+    {% endif %}
+
+    <span class="pager-position">Page {{ fp.pageNumber | plus1 }} of {{ fp.totalPages }}</span>
+
+    {% if fp.nextUrl %}
+      <a class="pager-link pager-next" href="{{ fp.nextUrl | url }}">Older →</a>
+    {% else %}
+      <span class="pager-link pager-disabled">Older →</span>
+    {% endif %}
+  </nav>
+{% endif %}

@@ -15,7 +15,7 @@ eleventyComputed:
     <span class="event-photo event-photo--invader">{{ eventItem.slug | invader | safe }}</span>
     <span class="rail-label">Event</span>
     <span class="rail-date">
-      <time datetime="{{ eventItem.data.date }}">{{ eventItem.data.date | readableDate }}</time>
+      <time datetime="{{ eventItem.data.startDate }}">{{ eventItem.data.startDate | dateRange(eventItem.data.endDate) }}</time>
     </span>
     {% if eventItem.data.location %}<span>{{ eventItem.data.location }}</span>{% endif %}
   </div>

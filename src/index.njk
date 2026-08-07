@@ -1,35 +1,49 @@
 ---
+pagination:
+  data: research
+  size: 25
+  alias: pageEntries
+permalink: "{% if pagination.pageNumber == 0 %}/{% else %}/page/{{ pagination.pageNumber | plus1 }}/{% endif %}"
 layout: base.njk
-title: null
-description: "AtlasLatino maps Latin American researchers and their work."
+eleventyComputed:
+  title: "{% if pagination.pageNumber > 0 %}Page {{ pagination.pageNumber | plus1 }} · {% endif %}null"
 ---
 {#
   The home page is deliberately compact: the feed starts near the top.
   The long "what this is" paragraph lives on /about/ instead. "Add
   yourself or your research" isn't repeated here since it's already in
-  the footer on every page.
+  the footer on every page. "Browse by event" / "Browse by field, type,
+  or country" aren't repeated here either — both are top nav items now
+  (Events, Browse), so a duplicate link right below would just be noise.
+
+  Paginated at 25 entries per page once the feed stops being small
+  enough to browse as one flat list — see src/_data/research.js for
+  why the sort order stays stable across pages (a comparator that
+  doesn't return 0 for ties would silently reshuffle entries between
+  page loads, which is exactly the kind of bug that's invisible until
+  someone hits page 2 of a long feed and sees an entry twice, or not
+  at all).
 #}
 {# The design keeps the home page chrome-free, but the document still
    needs a top-level heading: without it the site's main entry point
    starts at h2 for anyone navigating by heading level. #}
-<h1 class="visually-hidden">AtlasLatino — research feed</h1>
+<h1 class="visually-hidden">AtlasLatino — research feed{% if pagination.pageNumber > 0 %}, page {{ pagination.pageNumber | plus1 }}{% endif %}</h1>
 
 <div class="section-bar">
   <h2 class="section-title">
     Research feed
     <span class="count">— {{ research.length }} {{ "entry" if research.length == 1 else "entries" }}</span>
   </h2>
-  <div class="intro-links">
-    <a href="{{ '/events/' | url }}">Browse by event →</a>
-  </div>
 </div>
 
-{% if research.length %}
+{% if pageEntries.length %}
   <ul class="feed">
-    {% for entry in research %}
+    {% for entry in pageEntries %}
       {% include "feed-item.njk" %}
     {% endfor %}
   </ul>
+
+  {% include "pager.njk" %}
 {% else %}
   <p class="empty-note">No research entries yet. <a href="https://github.com/verovaleros/atlaslatino">Be the first to add one.</a></p>
 {% endif %}

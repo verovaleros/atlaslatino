@@ -85,14 +85,31 @@ export const personSchema = z
   })
   .strict();
 
+// Events span multiple days (a village runs all four days of DEF CON;
+// Black Hat's trainings start days before its briefings) — a single
+// `date` field conflated "when does this event happen" with "when does
+// a session at it happen", and that ambiguity is exactly what caused a
+// real mixup between an event's date and one of its sessions' dates.
+// Two explicit fields instead. endDate is optional in frontmatter (a
+// genuinely single-day event shouldn't need to type the same date
+// twice) and defaults to startDate via `.transform()` below — done here
+// rather than in each consumer (src/_data/events.js, scripts/validate.js)
+// so every reader of eventSchema output sees the same already-normalized
+// shape, never a partial one.
 export const eventSchema = z
   .object({
     name: z.string().min(1, "required"),
     location: z.string().min(1).optional(),
-    date: isoDate,
+    startDate: isoDate,
+    endDate: isoDate.optional(),
     url: url.optional(),
   })
-  .strict();
+  .strict()
+  .transform((event) => ({ ...event, endDate: event.endDate ?? event.startDate }))
+  .refine((event) => event.endDate >= event.startDate, {
+    message: "endDate must be on or after startDate",
+    path: ["endDate"],
+  });
 
 const linkEntry = z.object({
   label: z.string().min(1, "required"),

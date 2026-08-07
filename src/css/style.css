@@ -878,31 +878,99 @@ nav.site-nav a[aria-current="page"] {
   text-align: right;
 }
 
+/* ---------- Browse hub (/browse/) ---------- */
+
+.browse-list {
+  list-style: none;
+  margin: 0 0 40px;
+  padding: 0;
+  border-top: 1px solid var(--gray-300);
+}
+
+.browse-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--gray-300);
+}
+
+.browse-list a {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.browse-list a:hover { color: var(--accent); }
+
+.browse-count {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+/* ---------- Pager (home feed, filter pages) ---------- */
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 8px;
+  padding-top: 28px;
+  border-top: 1px solid var(--gray-300);
+}
+
+.pager-link {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-soft);
+  padding-bottom: 1px;
+}
+
+.pager-link:hover { border-bottom-color: var(--accent); }
+
+.pager-disabled {
+  color: var(--gray-500);
+  border-bottom: 1px solid transparent;
+  cursor: default;
+}
+
+.pager-position {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gray-500);
+  white-space: nowrap;
+}
+
 /* ---------- Event index ---------- */
 
+/* Two per row on wide screens — events carry far less content per entry
+   than a research entry (just a name, date, location), so the feed's
+   full-width rail layout left most of each row empty. A card grid uses
+   that space instead of wasting it. Falls back to one column once a
+   row can't fit two cards without the invader/name getting cramped
+   (see the max-width breakpoint below); mobile goes fully 1-column,
+   same as everything else, in the existing 640px block. */
 .event-list {
   border-top: 1px solid var(--gray-300);
   list-style: none;
   margin: 0;
   padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--gray-300);
 }
 
 .event-list li {
-  border-bottom: 1px solid var(--gray-300);
   background: var(--panel);
-  margin: 0 calc(var(--shell-pad) * -1);
-  padding: 30px var(--shell-pad);
-  display: grid;
-  grid-template-columns: var(--rail-w) 1fr;
-  gap: 0 var(--rail-gap);
-  align-items: baseline;
-}
-
-.event-list .rail {
-  padding-top: 2px;
-}
-
-.event-heading {
+  padding: 24px 28px;
   display: flex;
   align-items: flex-start;
   gap: 16px;
@@ -923,10 +991,24 @@ nav.site-nav a[aria-current="page"] {
   height: 100%;
 }
 
+.event-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.event-date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gray-500);
+  order: -1;
+  margin-bottom: 6px;
+}
+
 .event-name {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 21px;
+  font-size: 19px;
   line-height: 1.3;
   letter-spacing: -0.008em;
   color: var(--ink);
@@ -940,6 +1022,10 @@ nav.site-nav a[aria-current="page"] {
   font-family: var(--font-mono);
   font-size: 12.5px;
   color: var(--gray-500);
+}
+
+@media (max-width: 760px) {
+  .event-list { grid-template-columns: 1fr; }
 }
 
 /* ---------- Event detail header ---------- */
@@ -1192,8 +1278,8 @@ footer.site {
 
   .event-head .rail { padding-top: 0; }
   .event-photo--invader { width: 56px; height: 56px; }
-  .event-list li { padding: 22px var(--shell-pad); }
-  .event-list .rail { margin-bottom: 8px; }
+  .event-list { grid-template-columns: 1fr; }
+  .event-list li { padding: 18px var(--shell-pad); }
   .event-invader { width: 28px; height: 28px; }
   .event-name { font-size: 18px; }
 
@@ -1225,6 +1311,12 @@ footer.site {
   .field-bar-label { grid-area: label; }
   .field-bar-track { grid-area: track; }
   .field-bar-count { grid-area: count; }
+
+  /* Position label wraps to its own line under a phone width if left
+     between two links — keep it there permanently at this width rather
+     than fighting for the same row. */
+  .pager { flex-wrap: wrap; justify-content: center; text-align: center; }
+  .pager-position { order: 3; width: 100%; }
 
   footer.site { padding: 34px 0 48px; }
   .footer-body { flex-direction: column; gap: 8px; }

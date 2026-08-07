@@ -23,7 +23,8 @@
     <header class="site">
       <a class="wordmark" href="{{ '/' | url }}">Atlas<span>Latino</span></a>
       <nav class="site-nav">
-        <a href="{{ '/' | url }}"{% if page.url == '/' %} aria-current="page"{% endif %}>Feed</a>
+        <a href="{{ '/' | url }}"{% if page.url == '/' or page.url.startsWith('/page/') %} aria-current="page"{% endif %}>Feed</a>
+        <a href="{{ '/browse/' | url }}"{% if page.url == '/browse/' or page.url.startsWith('/field/') or page.url.startsWith('/type/') or page.url.startsWith('/country/') %} aria-current="page"{% endif %}>Browse</a>
         <a href="{{ '/people/' | url }}"{% if page.url == '/people/' %} aria-current="page"{% endif %}>People</a>
         <a href="{{ '/events/' | url }}"{% if page.url.startsWith('/events/') %} aria-current="page"{% endif %}>Events</a>
         <a href="{{ '/stats/' | url }}"{% if page.url == '/stats/' %} aria-current="page"{% endif %}>Stats</a>
