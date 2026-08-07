@@ -1,22 +1,27 @@
+<img width="1487" height="130" alt="image" src="https://github.com/user-attachments/assets/55baaff7-744c-4109-8e82-d8e6db901a65" />
+
 # AtlasLatino
 
-AtlasLatino is a directory of security research from Latin America. It
-gathers the people, the talks, and the work, in one place, so it is
-easier to find and easier to point to.
+AtlasLatino is a directory of security research from Latin America. It gathers the people, the talks, and the work, in one place, so it is easier to find and easier to point to.
 
-Latin American researchers publish and speak at conferences all over
-the world, but their work is scattered across personal sites, slide
-decks, and social media. AtlasLatino brings it together. No rankings,
-no scores, no analytics. Just the work and the people behind it.
+Latin American researchers publish and speak at conferences all over the world, but their work is scattered across personal sites, slide decks, and social media. AtlasLatino brings it together. No rankings, no scores, no analytics. Just the work and the people behind it.
 
 ## What's in it
 
-- **People**: a short profile for each researcher, with their country,
-  affiliation, and links.
-- **Research**: papers, talks, and projects, each linked to the people
-  behind them and, when it applies, the event where it was presented.
-- **Events**: the conferences where this research was shown, so you
-  can browse everything from a given event in one place.
+### **Research**
+Papers, talks, and projects, each linked to the people behind them and the event at which they were presented.
+<img width="1506" height="423" alt="image" src="https://github.com/user-attachments/assets/f77a0a7e-0ed9-4b53-87ad-ec468d1eac27" />
+
+### **People**
+A short profile for each researcher, with their country of origin and links to socials.
+<img width="1421" height="342" alt="image" src="https://github.com/user-attachments/assets/00399cef-e2ec-46fe-9b9f-cfbcd23fb72b" />
+
+
+### **Events**
+
+The conferences where this research was shown, so you can browse everything from a given event in one place.
+<img width="1510" height="445" alt="image" src="https://github.com/user-attachments/assets/b9ced16b-cb86-4095-a55f-2ca867cf456c" />
+
 
 ## Contributing
 
