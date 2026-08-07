@@ -19,6 +19,11 @@ export default function (eleventyConfig) {
   // Pages to recognize the custom domain. Copied from the repo root, not
   // src/, since it isn't part of the site's own content tree.
   eleventyConfig.addPassthroughCopy("CNAME");
+  // .nojekyll tells GitHub Pages to skip its legacy Jekyll auto-builder,
+  // which otherwise runs on every push regardless of our own Actions
+  // deploy and fails loudly trying to parse Nunjucks syntax as Liquid —
+  // cosmetic noise (our actual deploy is unaffected), but worth silencing.
+  eleventyConfig.addPassthroughCopy(".nojekyll");
 
   // Human-readable label for a field slug, e.g. {{ "machine-learning" | fieldLabel }}
   eleventyConfig.addFilter("fieldLabel", (slug) => FIELD_LABELS[slug] ?? slug);
