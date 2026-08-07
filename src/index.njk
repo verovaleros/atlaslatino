@@ -6,7 +6,10 @@ pagination:
 permalink: "{% if pagination.pageNumber == 0 %}/{% else %}/page/{{ pagination.pageNumber | plus1 }}/{% endif %}"
 layout: base.njk
 eleventyComputed:
-  title: "{% if pagination.pageNumber > 0 %}Page {{ pagination.pageNumber | plus1 }} · {% endif %}null"
+  # Empty (not "null") on page 0 — base.njk's <title> only prepends
+  # "<title> · " when title is truthy, so leaving this blank there
+  # falls through to the bare "AtlasLatino" tab title as intended.
+  title: "{% if pagination.pageNumber > 0 %}Page {{ pagination.pageNumber | plus1 }}{% endif %}"
 ---
 {#
   The home page is deliberately compact: the feed starts near the top.
