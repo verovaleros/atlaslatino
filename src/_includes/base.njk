@@ -26,6 +26,7 @@
         <a href="{{ '/' | url }}"{% if page.url == '/' %} aria-current="page"{% endif %}>Feed</a>
         <a href="{{ '/people/' | url }}"{% if page.url == '/people/' %} aria-current="page"{% endif %}>People</a>
         <a href="{{ '/events/' | url }}"{% if page.url.startsWith('/events/') %} aria-current="page"{% endif %}>Events</a>
+        <a href="{{ '/stats/' | url }}"{% if page.url == '/stats/' %} aria-current="page"{% endif %}>Stats</a>
         <a href="https://github.com/verovaleros/atlaslatino">Contribute</a>
         <a href="{{ '/about/' | url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>About</a>
       </nav>

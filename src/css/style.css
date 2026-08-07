@@ -791,6 +791,93 @@ nav.site-nav a[aria-current="page"] {
   margin-bottom: 4px;
 }
 
+/* ---------- Stats page ---------- */
+
+.stat-grid {
+  list-style: none;
+  margin: 0 0 40px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--gray-300);
+  border: 1px solid var(--gray-300);
+}
+
+.stat-tile {
+  background: var(--panel);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-number {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+
+/* Horizontal bars, one per field with at least one entry, in the fixed
+   order fields.js defines — not sorted by count. These are different
+   topics, not competing entries, so nothing here should read as a
+   ranking (same principle the rest of the site holds to). Each row
+   reuses the .field-* classes and --field-color custom property the
+   rail tags already define, so a field's color is identical wherever
+   it appears on the site. */
+.field-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field-bar-row {
+  display: grid;
+  grid-template-columns: 220px 1fr 32px;
+  align-items: center;
+  gap: 16px;
+}
+
+.field-bar-label .rail-field {
+  color: var(--gray-700);
+}
+
+.field-bar-track {
+  display: block;
+  height: 8px;
+  background: var(--gray-200);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.field-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--field-color, var(--gray-350));
+  border-radius: 2px;
+}
+
+.field-bar-count {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--gray-500);
+  text-align: right;
+}
+
 /* ---------- Event index ---------- */
 
 .event-list {
@@ -1117,6 +1204,27 @@ footer.site {
   .prose-body .lede { font-size: 16.5px; }
   .prose-body h2 { margin-top: 34px; }
   pre { max-width: none; font-size: 12.5px; padding: 14px 15px; }
+
+  /* Two columns instead of four — four 40px numbers in one row don't
+     fit a phone width without truncating or shrinking the type past
+     legibility, but two per row still reads at a glance. */
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .stat-tile { padding: 22px 16px; }
+  .stat-number { font-size: 30px; }
+
+  /* The label|track|count grid assumes room for a fixed-width label
+     column that doesn't exist on a phone — stack each bar's label
+     above its track instead of beside it. */
+  .field-bar-row {
+    grid-template-columns: 1fr 32px;
+    grid-template-areas:
+      "label label"
+      "track count";
+    row-gap: 6px;
+  }
+  .field-bar-label { grid-area: label; }
+  .field-bar-track { grid-area: track; }
+  .field-bar-count { grid-area: count; }
 
   footer.site { padding: 34px 0 48px; }
   .footer-body { flex-direction: column; gap: 8px; }

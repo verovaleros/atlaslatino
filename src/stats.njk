@@ -1,0 +1,61 @@
+---
+layout: base.njk
+title: Stats
+description: "AtlasLatino at a glance — people, research, and events, by the numbers."
+permalink: "/stats/"
+---
+<h1 class="visually-hidden">Stats</h1>
+
+<div class="section-bar">
+  <div class="rail-label">Index</div>
+  <h2 class="section-title">AtlasLatino at a glance</h2>
+</div>
+
+<ul class="stat-grid">
+  <li class="stat-tile">
+    <span class="stat-number">{{ stats.peopleCount }}</span>
+    <span class="stat-label">People</span>
+  </li>
+  <li class="stat-tile">
+    <span class="stat-number">{{ stats.researchCount }}</span>
+    <span class="stat-label">Research entries</span>
+  </li>
+  <li class="stat-tile">
+    <span class="stat-number">{{ stats.eventsCount }}</span>
+    <span class="stat-label">Events</span>
+  </li>
+  <li class="stat-tile">
+    <span class="stat-number">{{ stats.countriesCount }}</span>
+    <span class="stat-label">Countries represented</span>
+  </li>
+</ul>
+
+{% if stats.fieldCounts.length %}
+  <div class="section-bar">
+    <div class="rail-label">Breakdown</div>
+    <h2 class="section-title">Research by field</h2>
+  </div>
+
+  {#
+    Bars are in fields.js's fixed order, not sorted by count — these are
+    different topics, not competitors, so nothing here should read as a
+    ranking. Length still communicates real proportion; it just isn't
+    used to decide the order the fields are listed in.
+  #}
+  <ul class="field-bars">
+    {% for field in stats.fieldCounts %}
+      <li class="field-bar-row">
+        <span class="field-bar-label">
+          <span class="rail-field field-{{ field.slug }}">{{ field.label }}</span>
+        </span>
+        <span class="field-bar-track">
+          <span
+            class="field-bar-fill field-{{ field.slug }}"
+            style="width: {{ (field.count / stats.maxFieldCount * 100) | round(1) }}%"
+          ></span>
+        </span>
+        <span class="field-bar-count">{{ field.count }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
