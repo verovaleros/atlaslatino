@@ -1,0 +1,6 @@
+---
+name: Felipe Barbosa Alves
+country: BR
+affiliation: BASE4 Security
+---
+Cybersecurity specialist with solid technical and operational training, backed by more than a decade of experience in cyber defense, threat analysis, critical infrastructure management, and incident response. He holds recognized certifications in offensive and defensive fields, including OSCP, MITRE ATT&CK Defender, and MITRE ATT&CK CTI, and has specialized training in cyber warfare, forensic analysis, systems administration, and CSIRT management. For nine years, he served in the Brazilian Air Force as a Technical Non-Commissioned Officer with key responsibilities in Linux and Windows systems administration, network infrastructure management (Cisco), security analysis, technical leadership in incident response, and threat hunting. His approach combines tactical and strategic vision in highly structured and sensitive environments. He currently works for an international cybersecurity company, where he performs research, technical training, security operations center (SOC) analysis, mobile pentesting, and training for regional programs such as Cyber SOAM SOUTHCOM, aimed at Latin American security forces. His profile combines defense experience, deep technical insight, teaching skills, and a commitment to professional development in critical and multinational environments.
