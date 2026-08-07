@@ -4,7 +4,9 @@
 
 AtlasLatino is a directory of security research from Latin America. It gathers the people, the talks, and the work, in one place, so it is easier to find and easier to point to.
 
-Latin American researchers publish and speak at conferences all over the world, but their work is scattered across personal sites, slide decks, and social media. AtlasLatino brings it together. No rankings, no scores, no analytics. Just the work and the people behind it.
+Latin American researchers publish and speak at conferences around the world, but their work is scattered across personal websites, slide decks, and social media. AtlasLatino brings it together. No rankings, no scores, no analytics. Just the work and the people behind it.
+
+_Support this project by contributing content or giving it a star on GitHub_
 
 ## What's in it
 
