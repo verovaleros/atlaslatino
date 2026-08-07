@@ -1,0 +1,24 @@
+{
+  "name": "atlaslatino",
+  "version": "0.1.0",
+  "description": "AtlasLatino — visibility for Latin American researchers and their work.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "eleventy --serve",
+    "build": "ELEVENTY_ENV=production eleventy",
+    "validate": "node scripts/validate.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^15.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}

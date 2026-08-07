@@ -1,0 +1,58 @@
+---
+pagination:
+  data: events
+  size: 1
+  alias: eventItem
+permalink: "/events/{{ eventItem.slug }}/"
+layout: base.njk
+eleventyComputed:
+  title: "{{ eventItem.data.name }}"
+  description: "{{ eventItem.data.name }} — research presented by Latin American researchers."
+---
+{% set hideEvent = true %}
+<div class="event-head">
+  <div class="rail">
+    <span class="event-photo event-photo--invader">{{ eventItem.slug | invader | safe }}</span>
+    <span class="rail-label">Event</span>
+    <span class="rail-date">
+      <time datetime="{{ eventItem.data.date }}">{{ eventItem.data.date | readableDate }}</time>
+    </span>
+    {% if eventItem.data.location %}<span>{{ eventItem.data.location }}</span>{% endif %}
+  </div>
+  <div>
+    <h1>{{ eventItem.data.name }}</h1>
+    {% if eventItem.data.url %}
+      <p class="person-links"><a href="{{ eventItem.data.url }}">Event website</a></p>
+    {% endif %}
+  </div>
+</div>
+
+{% if eventItem.body %}
+  <div class="prose">
+    <div class="rail-label">About</div>
+    <div class="prose-body">
+      {{ eventItem.body | safe }}
+    </div>
+  </div>
+{% endif %}
+
+{% set eventResearch = relations.researchByEvent[eventItem.slug] %}
+<div class="section-bar">
+  <div class="rail-label">Index</div>
+  <h2 class="section-title">
+    Research presented here
+    {% if eventResearch and eventResearch.length %}
+      <span class="count">— {{ eventResearch.length }} {{ "entry" if eventResearch.length == 1 else "entries" }}</span>
+    {% endif %}
+  </h2>
+</div>
+
+{% if eventResearch and eventResearch.length %}
+  <ul class="feed">
+    {% for entry in eventResearch %}
+      {% include "feed-item.njk" %}
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty-note">No research entries linked to {{ eventItem.data.name }} yet.</p>
+{% endif %}

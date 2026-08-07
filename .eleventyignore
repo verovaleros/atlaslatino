@@ -1,0 +1,6 @@
+# src/content/**/*.md files are data sources, read directly by the
+# src/_data/*.js loaders (via gray-matter) — they are not meant to be
+# built as standalone pages. Without this, Eleventy's default md
+# template handling would also emit a bare, unstyled page per content
+# file at an unintended URL (e.g. /content/people/slug/).
+src/content/**

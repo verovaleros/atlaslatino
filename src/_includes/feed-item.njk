@@ -1,0 +1,110 @@
+{#
+  Renders one research entry as an expandable feed item: a left metadata
+  rail (date, type, field label with its color square) beside the title
+  and expandable body. Reused on the home feed, person pages, and event
+  pages so the interaction and markup stay identical everywhere.
+
+  type and field are two different classifications: type is what kind of
+  work it is (a talk, a training, a paper); field is what subject it's
+  in (security, machine learning, ...). Only field gets a color square,
+  since that's the one the field-color system was built for — type sits
+  beside it as plain text so the two aren't visually confused.
+
+  The rail deliberately carries no sequence number. Numbering entries
+  implies a position in an ordered list, and this site takes an explicit
+  stance that it is not a ranking — the date is the only ordering.
+
+  Params (set with {% set %} before the include):
+    entry        - a research entry: { slug, data, body }
+    people       - the full people collection (for resolving entry.data.people slugs)
+    events       - the full events collection (for resolving entry.data.event slug)
+    hidePerson   - optional bool; when true, don't show the people line
+                   (used on a person's own page, where it's redundant)
+    hideEvent    - optional bool; when true, don't show the event line
+                   (used on an event's own page, where it's redundant)
+#}
+<li>
+  <details class="entry{% if hidePerson %} entry--no-person{% endif %}">
+    <summary>
+      <span class="rail">
+        <span class="rail-top">
+          <span class="chevron" aria-hidden="true"></span>
+          <span class="rail-date">
+            <time datetime="{{ entry.data.date }}">{{ entry.data.date | readableDate }}</time>
+          </span>
+        </span>
+        <span class="rail-tags">
+          <span class="rail-type">{{ entry.data.type | typeLabel }}</span>
+          <span class="rail-field field-{{ entry.data.field }}">{{ entry.data.field | fieldLabel }}</span>
+        </span>
+        {% if not hideEvent and entry.data.event %}
+          {% set event = events | findBySlug(entry.data.event) %}
+          {% if event %}<span class="rail-event">{{ event.data.name }}</span>{% endif %}
+        {% endif %}
+      </span>
+      <span class="entry-head">
+        <span class="entry-heading">
+          {# Name first: the person is the headline, the research title
+             supports it. See .entry-people in style.css.
+             Each name carries its own country — the site's purpose is
+             regional visibility, and on a multi-author entry a single
+             combined country tag would hide who is from where. #}
+          {% if not hidePerson %}
+            {# Separators go BETWEEN resolved names, not by loop position —
+               a dangling/renamed person slug that doesn't resolve must not
+               leave a bare "·" with nothing after it. #}
+            {% set resolvedPeople = [] %}
+            {% for personSlug in entry.data.people %}
+              {% set person = people | findBySlug(personSlug) %}
+              {% if person %}{% set resolvedPeople = (resolvedPeople.push(person), resolvedPeople) %}{% endif %}
+            {% endfor %}
+            <span class="entry-people">
+              {%- for person in resolvedPeople -%}
+                {{ person.data.name }}{% if person.data.country %} <span class="country-tag">{{ person.data.country }}</span>{% endif %}{% if not loop.last %}<span class="sep">&middot;</span>{% endif %}
+              {%- endfor -%}
+            </span>
+          {% endif %}
+          <span class="entry-title">{{ entry.data.title }}</span>
+        </span>
+      </span>
+    </summary>
+
+    <div class="entry-body">
+      <div class="rail-spacer"></div>
+      <div class="entry-content">
+        {{ entry.body | safe }}
+
+        {% if not hidePerson %}
+          <p class="entry-refs">
+            <span class="ref-kind">Researchers</span>
+            {%- for personSlug in entry.data.people -%}
+              {%- set person = people | findBySlug(personSlug) -%}
+              {%- if person %}<a href="{{ ('/people/' + person.slug + '/') | url }}">{{ person.data.name }}</a>{% if person.data.country %} <span class="country-tag">{{ person.data.country }}</span>{% endif %}{% endif -%}
+            {%- endfor -%}
+          </p>
+        {% endif %}
+
+        {% if not hideEvent and entry.data.event %}
+          {% set event = events | findBySlug(entry.data.event) %}
+          {% if event %}
+            <p class="entry-refs">
+              <span class="ref-kind">Presented at</span>
+              <a href="{{ ('/events/' + event.slug + '/') | url }}">{{ event.data.name }}</a>
+            </p>
+          {% endif %}
+        {% endif %}
+
+        {% if (entry.data.links and entry.data.links.length) or (entry.data.news and entry.data.news.length) %}
+          <div class="entry-meta-row">
+            {% for link in entry.data.links %}
+              <a class="meta-link" href="{{ link.url }}">{{ link.label }}</a>
+            {% endfor %}
+            {% for item in entry.data.news %}
+              <span class="coverage-note"><a href="{{ item.url }}">{{ item.label }}</a></span>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </details>
+</li>

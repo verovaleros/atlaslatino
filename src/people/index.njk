@@ -1,0 +1,65 @@
+---
+layout: base.njk
+title: People
+description: "Latin American researchers and practitioners on AtlasLatino."
+permalink: "/people/"
+---
+<h1 class="visually-hidden">People</h1>
+
+<div class="section-bar">
+  <div class="rail-label">Index</div>
+  <h2 class="section-title">
+    All people
+    {% if people.length %}
+      <span class="count">— {{ people.length }} {{ "person" if people.length == 1 else "people" }}</span>
+    {% endif %}
+  </h2>
+</div>
+
+{% if people.length %}
+  <ul class="person-grid" data-shuffle>
+    {% for person in people %}
+      {% set lastEntry = relations.researchByPerson[person.slug][0] %}
+      <li class="person-card">
+        <a class="person-card-link" href="{{ ('/people/' + person.slug + '/') | url }}">
+          <span class="person-card-photo person-card-photo--invader">{{ person.slug | invader | safe }}</span>
+          <span class="person-card-name">
+            {{ person.data.name }}
+            {% if person.data.country %}<span class="country-tag">{{ person.data.country }}</span>{% endif %}
+          </span>
+          {% if person.data.affiliation %}
+            <span class="person-card-affiliation">{{ person.data.affiliation }}</span>
+          {% endif %}
+          {% if lastEntry %}
+            <span class="person-card-last">
+              <span class="ref-kind">Latest</span>
+              {{ lastEntry.data.title }}
+            </span>
+          {% endif %}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty-note">No one here yet. <a href="https://github.com/verovaleros/atlaslatino">Add yourself.</a></p>
+{% endif %}
+
+{# Shuffles the cards in the browser on every load, so order is genuinely
+   random per visit rather than a fixed order anyone could game (e.g. by
+   picking a name that sorts first). No build step or dependency needed
+   for this — it's the one place on the site with inline JS, kept
+   deliberately small and with no external script. Cards render in
+   document order first, so this still works with JS disabled; they're
+   just unshuffled in that case, not missing. #}
+<script>
+  (function () {
+    var list = document.querySelector("[data-shuffle]");
+    if (!list) return;
+    var items = Array.prototype.slice.call(list.children);
+    for (var i = items.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = items[i]; items[i] = items[j]; items[j] = tmp;
+    }
+    items.forEach(function (item) { list.appendChild(item); });
+  })();
+</script>

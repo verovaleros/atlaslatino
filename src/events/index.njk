@@ -1,0 +1,42 @@
+---
+layout: base.njk
+title: Events
+description: "Conferences and venues where Latin American researchers have presented their work."
+permalink: "/events/"
+---
+<h1 class="visually-hidden">Events</h1>
+
+{% set sortedEvents = events | sort(true, false, "data.date") %}
+
+<div class="section-bar">
+  <div class="rail-label">Index</div>
+  <h2 class="section-title">
+    All events
+    {% if sortedEvents.length %}
+      <span class="count">— {{ sortedEvents.length }} {{ "event" if sortedEvents.length == 1 else "events" }}</span>
+    {% endif %}
+  </h2>
+</div>
+
+{% if sortedEvents.length %}
+  <ul class="event-list">
+    {% for event in sortedEvents %}
+      <li>
+        <span class="rail">
+          <span class="rail-date">
+            <time datetime="{{ event.data.date }}">{{ event.data.date | readableDate }}</time>
+          </span>
+        </span>
+        <span class="event-heading">
+          <span class="event-invader">{{ event.slug | invader | safe }}</span>
+          <span>
+            <a class="event-name" href="{{ ('/events/' + event.slug + '/') | url }}">{{ event.data.name }}</a>
+            {% if event.data.location %}<p class="event-location">{{ event.data.location }}</p>{% endif %}
+          </span>
+        </span>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty-note">No events yet. <a href="https://github.com/verovaleros/atlaslatino">Add one.</a></p>
+{% endif %}
