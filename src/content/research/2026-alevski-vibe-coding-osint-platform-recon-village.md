@@ -19,3 +19,68 @@ Rather than simply watching a demo, attendees will actively build the applicatio
 The workshop begins with the fundamentals of vibe coding: what it actually is, why it works, where it fails, and how to communicate effectively with AI agents. Participants will learn practical prompting strategies, iterative development techniques, and methods for breaking large software systems into manageable tasks that AI can successfully implement.
 
 From there, we'll progressively build an intelligence dashboard capable of consuming and visualizing multiple real-time OSINT sources, including flight tracking, satellite positions, earthquake feeds, maritime traffic, and other publicly available intelligence signals. Along the way, participants will generate modern user interfaces, integrate external APIs, debug AI-generated code, and learn when to trust the model and when not to.
+
+Rather than treating AI as a code generator, this workshop teaches attendees how to use AI as an engineering partner capable of dramatically increasing development velocity while still maintaining high-quality software.
+
+By the end of the workshop, every participant will have:
+
+1. A working open-source intelligence platform running locally
+
+2. A practical workflow for building complex software using AI coding agents
+
+3. A reusable prompting framework applicable to future projects
+
+4. Experience integrating multiple public OSINT data sources
+
+5. An understanding of the strengths and limitations of AI-assisted software development
+
+6. A roadmap for continuing to extend the platform after the workshop
+
+The workshop is based on the open-source project: https://github.com/Alevsk/respondent-community
+
+# `Workshop Outline (150 Minutes)`
+
+## `Part 1 — Introduction to Vibe Coding (20 min)`
+
+- `What vibe coding actually means`
+- `Mental models for collaborating with AI`
+- `Selecting the right AI model for the task`
+- `Understanding agentic coding workflows`
+- `Common mistakes and misconceptions`
+
+---
+
+## `Part 2 — Prompt Engineering for Software Development (25 min)`
+
+- `Structuring prompts that produce maintainable code`
+- `Breaking large systems into incremental tasks`
+- `Designing software through conversation`
+- `Iterating instead of regenerating`
+- `Knowing when to intervene manually`
+
+---
+
+## `Part 3 — Building the Intelligence Platform (75 min)`
+
+`Participants will build the platform together while learning how to:`
+
+- `Generate a modern frontend`
+- `Create a real-time 3D globe visualization`
+- `Integrate multiple public OSINT APIs`
+- `Display flights, satellites, earthquakes, ships, and additional intelligence feeds`
+- `Build reusable UI components with AI`
+- `Debug AI-generated code`
+- `Refactor and improve generated implementations`
+- `Continue extending the application using AI as a development partner`
+
+---
+
+## `Part 4 — Lessons Learned & Advanced Techniques (20 min)`
+
+- `What AI does well`
+- `Where AI still struggles`
+- `Managing technical debt`
+- `Building larger projects with AI`
+- `Cost optimization strategies`
+- `Recommended workflows and tooling`
+- `Future directions for AI-assisted engineering`
