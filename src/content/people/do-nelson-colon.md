@@ -1,5 +1,5 @@
 ---
-name: Nelson Colon
+name: Nelson Rafael Colón Merán
 country: DO
 affiliation: Bitso Quetzal Team
 ---
