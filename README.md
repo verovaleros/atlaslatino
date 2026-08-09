@@ -24,6 +24,11 @@ A short profile for each researcher, with their country of origin and links to s
 The conferences where this research was shown, so you can browse everything from a given event in one place.
 <img width="1510" height="445" alt="image" src="https://github.com/user-attachments/assets/b9ced16b-cb86-4095-a55f-2ca867cf456c" />
 
+### **Stats**
+
+A simple breakdown of events, researchers, and talks, and how the research talks break down by field.
+<img width="1180" height="526" alt="image" src="https://github.com/user-attachments/assets/f5a9b693-4acb-4fd2-b114-541f5f23bcd4" />
+
 
 ## Contributing
 
