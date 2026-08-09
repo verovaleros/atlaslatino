@@ -82,9 +82,12 @@ for (const entry of people) {
   const result = personSchema.safeParse(entry.data);
   if (!result.success) reportZodError(entry.file, result.error);
 
-  if (!entry.body) {
-    errors.push(`${entry.file}: body — a short bio is required (1–2 paragraphs), file body is empty`);
-  }
+  // A bio is optional. When we add someone from a conference schedule we
+  // often have only their name, country, and a link — and an invented
+  // bio is worse than none, since a plausible-looking fabrication is hard
+  // to spot and back out later. A person with no body simply renders as
+  // name/country/links with no bio paragraph (see src/people/person.njk,
+  // which already guards the bio block with `{% if person.body %}`).
 }
 
 // --- Events -----------------------------------------------------------
