@@ -27,7 +27,6 @@ eleventyComputed:
         {%- else -%}
           {{ person.data.country }}
         {%- endif -%}
-        {%- if person.data.currentCountry and person.data.currentCountry != person.data.country %} → {{ person.data.currentCountry }}{% endif -%}
       </p>
     {% endif %}
 
