@@ -60,7 +60,10 @@
             {% endfor %}
             <span class="entry-people">
               {%- for person in resolvedPeople -%}
-                {{ person.data.name }}{% if person.data.country %} <span class="country-tag">{{ person.data.country }}</span>{% endif %}{% if not loop.last %}<span class="sep">&middot;</span>{% endif %}
+                {{ person.data.name }}{% if person.data.country %} <span class="country-tag">{{ person.data.country }}</span>{% endif %}{% if (not loop.last) or entry.data.externalPeople %}<span class="sep">&middot;</span>{% endif %}
+              {%- endfor -%}
+              {%- for externalPerson in entry.data.externalPeople -%}
+                {{ externalPerson.name }}{% if externalPerson.affiliation %} <span class="muted">({{ externalPerson.affiliation }})</span>{% endif %}{% if not loop.last %}<span class="sep">&middot;</span>{% endif %}
               {%- endfor -%}
             </span>
           {% endif %}
@@ -79,7 +82,10 @@
             <span class="ref-kind">Researchers</span>
             {%- for personSlug in entry.data.people -%}
               {%- set person = people | findBySlug(personSlug) -%}
-              {%- if person %}<a href="{{ ('/people/' + person.slug + '/') | url }}">{{ person.data.name }}</a>{% if person.data.country %} <span class="country-tag">{{ person.data.country }}</span>{% endif %}{% endif -%}
+              {%- if person %}<a href="{{ ('/people/' + person.slug + '/') | url }}">{{ person.data.name }}</a>{% if person.data.country %} <span class="country-tag">{{ person.data.country }}</span>{% endif %}{% if (not loop.last) or entry.data.externalPeople %}<span class="sep">&middot;</span>{% endif %}{% endif -%}
+            {%- endfor -%}
+            {%- for externalPerson in entry.data.externalPeople -%}
+              <span>{{ externalPerson.name }}{% if externalPerson.affiliation %} ({{ externalPerson.affiliation }}){% endif %}</span>{% if not loop.last %}<span class="sep">&middot;</span>{% endif %}
             {%- endfor -%}
           </p>
         {% endif %}
