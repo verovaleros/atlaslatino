@@ -74,7 +74,6 @@ export const personSchema = z
     name: z.string().min(1, "required"),
     country: isoCountry,
     city: z.string().min(1).optional(),
-    currentCountry: isoCountry.optional(),
     affiliation: z.string().min(1).optional(),
     // NOTE: no "field" here on purpose — field/topic tagging lives on
     // research entries, not people (a person's areas are the union of
@@ -116,11 +115,19 @@ const linkEntry = z.object({
   url: url,
 });
 
+const externalPersonEntry = z
+  .object({
+    name: z.string().min(1, "required"),
+    affiliation: z.string().min(1).optional(),
+  })
+  .strict();
+
 export const researchSchema = z
   .object({
     title: z.string().min(1, "required"),
     date: isoDate,
     people: z.array(z.string().min(1)).min(1, "must reference at least one person slug"),
+    externalPeople: z.array(externalPersonEntry).optional(),
     event: z.string().min(1).optional(),
     field: z.enum(FIELD_SLUGS, {
       message: `must be one of: ${FIELD_SLUGS.join(", ")}`,
