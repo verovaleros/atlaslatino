@@ -1,7 +1,6 @@
 ---
 name: Asher Davila
 country: MX
-currentCountry: US
 affiliation: Palo Alto Networks
 links:
   website: https://cronop-io.github.io
