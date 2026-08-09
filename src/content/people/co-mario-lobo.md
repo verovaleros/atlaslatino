@@ -1,7 +1,6 @@
 ---
 name: Mario Lobo
 country: CO
-currentCountry: US
 affiliation: Lumu Technologies
 links:
   linkedin: https://linkedin.com/in/mario-lobo-cti/

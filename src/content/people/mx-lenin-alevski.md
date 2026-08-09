@@ -1,7 +1,6 @@
 ---
 name: Lenin Alevski
 country: MX
-currentCountry: US
 affiliation: Google
 links:
   website: https://www.alevsk.com
