@@ -34,10 +34,12 @@ A simple breakdown of events, researchers, and talks, and how the research talks
 
 Want to add a talk, a person, or an event? See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## Support
+
+AtlasLatino is a free, volunteer-run project. If you'd like to help keep it going, you can sponsor it on [GitHub Sponsors](https://github.com/sponsors/verovaleros) or buy me a coffee on [Ko-fi](https://ko-fi.com/verovaleros).
+
 ## License
 
 The code is licensed under the [MIT License](LICENSE).
 
-The content (people, event, and research entries under `src/content/`)
-is licensed separately under [CC BY 4.0](LICENSE-CONTENT) — reusable
-with attribution.
+The content (people, event, and research entries under `src/content/`) is licensed separately under [CC BY 4.0](LICENSE-CONTENT) — reusable with attribution.
