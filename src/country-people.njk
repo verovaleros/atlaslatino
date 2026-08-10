@@ -1,0 +1,30 @@
+---
+pagination:
+  data: browsePeople.countryPeople
+  size: 1
+  alias: group
+permalink: "{{ group.url }}"
+layout: base.njk
+eleventyComputed:
+  title: "{{ group.label }} · People"
+  description: "Researchers from {{ group.label }} on AtlasLatino."
+---
+<h1 class="visually-hidden">People from {{ group.label }}</h1>
+
+<div class="section-bar">
+  <div class="rail-label">Country · People</div>
+  <h2 class="section-title">
+    {{ group.label }}
+    <span class="count">— {{ group.people.length }} {{ "person" if group.people.length == 1 else "people" }}</span>
+  </h2>
+  <div class="intro-links">
+    <a href="{{ ('/country/' + group.slug + '/') | url }}">View talks →</a>
+    <a href="{{ '/browse/' | url }}">← All filters</a>
+  </div>
+</div>
+
+<ul class="person-grid">
+  {% for person in group.people %}
+    {% include "person-card.njk" %}
+  {% endfor %}
+</ul>

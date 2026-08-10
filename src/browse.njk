@@ -1,65 +1,72 @@
 ---
 layout: base.njk
 title: Browse
-description: "Browse AtlasLatino by field, type, or country."
+description: "Browse AtlasLatino by field, type, or country — talks or people."
 permalink: "/browse/"
 ---
 <h1 class="visually-hidden">Browse</h1>
 
 {#
-  One list per axis, each entry just a count and a link to that filter's
-  first page — no combining filters (single-axis only, see
-  src/_data/browsePages.js), so this hub is the one place all three
-  axes are visible together.
+  One list per axis (field / type / country). Each row carries two counts:
+  Talks (links to that filter's research feed) and People (links to the
+  researchers connected to it). Single-axis only — no combining filters
+  (see src/_data/browsePages.js / browsePeople.js).
 
-  Fields and types come from their fixed lists (fields.js/types.js) so
-  the order here matches how they appear everywhere else on the site.
-  Countries are alphabetical, not sorted by count — same reasoning as
-  the stats page: these aren't competing entities, so nothing here
-  should read as a ranking.
+  Fields and types come from their fixed lists so the order matches the
+  rest of the site; countries are alphabetical, not by count — same
+  reasoning as the stats page: nothing here should read as a ranking.
+
+  Talks counts come from browsePages (page 0 of each filter's feed);
+  People counts come from browsePeople. A row only appears if it has at
+  least one talk; the People cell shows "—" if that axis value has talks
+  but somehow no resolved people (shouldn't happen, but never links to an
+  empty page).
 #}
 
-<div class="section-bar">
-  <div class="rail-label">Browse</div>
-  <h2 class="section-title">By field</h2>
+{% macro browseRow(label, talksUrl, talksCount, peopleUrl, peopleCount) %}
+  <li class="browse-row">
+    <span class="browse-label">{{ label }}</span>
+    <a class="browse-cell" href="{{ talksUrl | url }}">{{ talksCount }}</a>
+    {% if peopleCount %}
+      <a class="browse-cell" href="{{ peopleUrl | url }}">{{ peopleCount }}</a>
+    {% else %}
+      <span class="browse-cell browse-cell--empty">—</span>
+    {% endif %}
+  </li>
+{% endmacro %}
+
+<div class="section-bar section-bar--browse">
+  <h2 class="section-title">Browse by field</h2>
+  <div class="browse-heads"><span>Talks</span><span>People</span></div>
 </div>
-<ul class="browse-list">
+<ul class="browse-list browse-list--two">
   {% for fp in browsePages.fieldPages %}
     {% if fp.pageNumber == 0 %}
-      <li>
-        <a href="{{ fp.url | url }}">{{ fp.label }}</a>
-        <span class="browse-count">{{ fp.totalEntries }}</span>
-      </li>
+      {{ browseRow(fp.label, fp.url, fp.totalEntries, "/field/" + fp.basePath.split("/")[2] + "/people/", browsePeople.fieldCounts[fp.basePath.split("/")[2]]) }}
     {% endif %}
   {% endfor %}
 </ul>
 
-<div class="section-bar">
-  <div class="rail-label">Browse</div>
-  <h2 class="section-title">By type</h2>
+<div class="section-bar section-bar--browse">
+  <h2 class="section-title">Browse by type</h2>
+  <div class="browse-heads"><span>Talks</span><span>People</span></div>
 </div>
-<ul class="browse-list">
+<ul class="browse-list browse-list--two">
   {% for fp in browsePages.typePages %}
     {% if fp.pageNumber == 0 %}
-      <li>
-        <a href="{{ fp.url | url }}">{{ fp.label }}</a>
-        <span class="browse-count">{{ fp.totalEntries }}</span>
-      </li>
+      {{ browseRow(fp.label, fp.url, fp.totalEntries, "/type/" + fp.basePath.split("/")[2] + "/people/", browsePeople.typeCounts[fp.basePath.split("/")[2]]) }}
     {% endif %}
   {% endfor %}
 </ul>
 
-<div class="section-bar">
-  <div class="rail-label">Browse</div>
-  <h2 class="section-title">By country</h2>
+<div class="section-bar section-bar--browse">
+  <h2 class="section-title">Browse by country</h2>
+  <div class="browse-heads"><span>Talks</span><span>People</span></div>
 </div>
-<ul class="browse-list">
+<ul class="browse-list browse-list--two">
   {% for fp in browsePages.countryPages %}
     {% if fp.pageNumber == 0 %}
-      <li>
-        <a href="{{ fp.url | url }}">{{ fp.label }}</a>
-        <span class="browse-count">{{ fp.totalEntries }}</span>
-      </li>
+      {{ browseRow(fp.label, fp.url, fp.totalEntries, "/country/" + fp.basePath.split("/")[2] + "/people/", browsePeople.countryCounts[fp.basePath.split("/")[2]]) }}
     {% endif %}
   {% endfor %}
 </ul>

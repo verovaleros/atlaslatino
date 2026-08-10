@@ -911,6 +911,61 @@ nav.site-nav a[aria-current="page"] {
   color: var(--gray-500);
 }
 
+/* Two-column browse table: label on the left, then Talks and People
+   counts as separate right-aligned cells, each its own link. The row is a
+   grid so the two count columns line up down the whole list regardless of
+   label length. Overrides the plain flex .browse-list li above. */
+.browse-list--two .browse-row {
+  display: grid;
+  grid-template-columns: 1fr 5.5em 5.5em;
+  align-items: baseline;
+  gap: 16px;
+}
+.browse-label {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--ink);
+}
+.browse-cell {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  text-align: right;
+  color: var(--ink);
+  text-decoration: none;
+}
+a.browse-cell { color: var(--ink); }
+a.browse-cell:hover { color: var(--accent); }
+.browse-cell--empty { color: var(--gray-500); }
+
+/* Column labels live in the section-bar itself (one row with the "By
+   field" title), not as a separate header row. Each label is the same
+   5.5em width as a count cell below, right-aligned, so "Talks"/"People"
+   sit directly over their columns. */
+/* On the browse hub, the section title reads as a column-header label
+   like Talks/People — small uppercase mono grey — not a full section
+   heading. Overrides .section-title's larger brighter styling. */
+.section-bar--browse .section-title {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+
+.browse-heads {
+  display: flex;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+.browse-heads span {
+  width: 5.5em;
+  text-align: right;
+}
+
 /* ---------- Pager (home feed, filter pages) ---------- */
 
 .pager {
