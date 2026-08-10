@@ -1,0 +1,38 @@
+---
+# Static client-side search index, emitted as one JSON file the in-header
+# search box fetches once and filters in the browser. Built from the same
+# global data the pages use, so it never drifts from the content.
+#
+# Research entries have no page of their own (they render on the feed,
+# person, and event pages), so a research result links to its event page
+# when it has one — that page lists the entry — and to the home feed
+# otherwise. People and events link to their own pages. Every url goes
+# through the `url` filter so links stay correct under a path prefix.
+#
+# eleventyExcludeFromCollections keeps this JSON out of every collection.
+permalink: "/search-index.json"
+eleventyExcludeFromCollections: true
+---
+[
+{%- set first = true -%}
+{%- for entry in research -%}
+  {%- set names = [] -%}
+  {%- for slug in entry.data.people -%}
+    {%- set p = people | findBySlug(slug) -%}
+    {%- if p -%}{%- set names = (names.push(p.data.name), names) -%}{%- endif -%}
+  {%- endfor -%}
+  {%- for ext in entry.data.externalPeople -%}
+    {%- set names = (names.push(ext.name), names) -%}
+  {%- endfor -%}
+  {%- set ev = events | findBySlug(entry.data.event) -%}
+  {%- set url = (("/events/" + ev.slug + "/") | url) if ev else ("/" | url) -%}
+  {%- if not first %},{% endif -%}{%- set first = false -%}
+{"kind":"research","title":{{ entry.data.title | dump | safe }},"sub":{{ (names | join(" · ")) | dump | safe }},"extra":{{ ((ev.data.name if ev else "") ~ " " ~ (entry.data.field | fieldLabel) ~ " " ~ (entry.data.type | typeLabel)) | dump | safe }},"url":{{ url | dump | safe }}}
+{%- endfor -%}
+{%- for person in people -%}
+,{"kind":"person","title":{{ person.data.name | dump | safe }},"sub":{{ (person.data.country or "") | dump | safe }},"extra":{{ (person.data.affiliation or "") | dump | safe }},"url":{{ (("/people/" + person.slug + "/") | url) | dump | safe }}}
+{%- endfor -%}
+{%- for event in events -%}
+,{"kind":"event","title":{{ event.data.name | dump | safe }},"sub":{{ (event.data.location or "") | dump | safe }},"extra":"","url":{{ (("/events/" + event.slug + "/") | url) | dump | safe }}}
+{%- endfor -%}
+]

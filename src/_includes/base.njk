@@ -21,8 +21,42 @@
 <body>
   <div class="shell">
     <header class="site">
-      <a class="wordmark" href="{{ '/' | url }}">Atlas<span>Latino</span></a>
-      <nav class="site-nav">
+      {# .header-top groups the wordmark with the search toggle. On desktop
+         it is `display: contents`, so wordmark / nav / search lay out on
+         one baseline exactly as before. On mobile it becomes a flex row so
+         the search glyph sits in the top-right corner beside the wordmark
+         instead of dangling on its own third row below the wrapped nav. #}
+      <div class="header-top">
+        <a class="wordmark" href="{{ '/' | url }}">Atlas<span>Latino</span></a>
+        <div class="search" data-search>
+          <a class="search-toggle" href="{{ '/browse/' | url }}" data-search-toggle
+             aria-label="Search" aria-expanded="false" aria-controls="search-panel">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+          </a>
+          <div class="search-panel" id="search-panel" hidden>
+            <div class="search-box">
+              <span class="search-box-icon" aria-hidden="true">⌕</span>
+              <input type="search" class="search-input" data-search-input
+                     placeholder="Search research, people, events…"
+                     autocomplete="off" spellcheck="false"
+                     aria-label="Search research, people, and events"
+                     aria-controls="search-results" aria-expanded="false" role="combobox">
+              <button type="button" class="search-close" data-search-close aria-label="Close search">✕</button>
+            </div>
+            <ul class="search-results" id="search-results" data-search-results role="listbox" hidden></ul>
+          </div>
+        </div>
+        {# Mobile-only nav toggle. Hidden on desktop (nav is always shown);
+           on mobile it collapses the 7 nav links behind a hamburger so the
+           header stays two compact elements — wordmark, then ⌕ and ☰ — with
+           no wrapped rows. With JS off it is display:none and the nav stays
+           open, so every link is still reachable. #}
+        <button type="button" class="nav-toggle" data-nav-toggle
+                aria-label="Menu" aria-expanded="false" aria-controls="site-nav" hidden>
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+      </div>
+      <nav class="site-nav" id="site-nav" data-site-nav>
         <a href="{{ '/' | url }}"{% if page.url == '/' or page.url.startsWith('/page/') %} aria-current="page"{% endif %}>Feed</a>
         <a href="{{ '/browse/' | url }}"{% if page.url == '/browse/' or page.url.startsWith('/field/') or page.url.startsWith('/type/') or page.url.startsWith('/country/') %} aria-current="page"{% endif %}>Browse</a>
         <a href="{{ '/people/' | url }}"{% if page.url == '/people/' %} aria-current="page"{% endif %}>People</a>
@@ -39,11 +73,178 @@
 
     <footer class="site">
       <div class="footer-body">
-        <span>Visibility for Latin American research. Not a ranking.</span>
-        <a href="https://github.com/verovaleros/atlaslatino">Add yourself or your research →</a>
-        <a href="https://buymeacoffee.com/verovaleros">Support this project →</a>
+        <span class="footer-tagline">Visibility for Latin American research. Not a ranking.</span>
+        <nav class="footer-links" aria-label="Footer">
+          <a href="https://github.com/verovaleros/atlaslatino">Add yourself or your research →</a>
+        </nav>
       </div>
     </footer>
   </div>
+
+  {# Mobile nav toggle. The button starts hidden (attribute); this script
+     unhides it, so with JS off it never appears and the nav stays open.
+     Opening search closes the menu and vice-versa, so the two overlays
+     never stack. Kept tiny and dependency-free, same as the rest. #}
+  <script>
+  (function () {
+    var btn = document.querySelector("[data-nav-toggle]");
+    var nav = document.querySelector("[data-site-nav]");
+    if (!btn || !nav) return;
+    btn.hidden = false;
+    function setOpen(on) {
+      nav.classList.toggle("is-open", on);
+      btn.setAttribute("aria-expanded", on ? "true" : "false");
+    }
+    btn.addEventListener("click", function () {
+      var willOpen = !nav.classList.contains("is-open");
+      // Opening the menu closes search, so the two overlays never stack.
+      if (willOpen) {
+        var sc = document.querySelector("[data-search-close]");
+        if (sc && document.querySelector("[data-search].is-open")) sc.click();
+      }
+      setOpen(willOpen);
+    });
+    // Close the menu after tapping a link, and on Escape.
+    nav.addEventListener("click", function (e) {
+      if (e.target.closest("a")) setOpen(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") setOpen(false);
+    });
+  })();
+  </script>
+
+  {# Search behaviour. Self-contained, no dependency, no build step —
+     same stance as the people-page shuffle. The index is fetched once,
+     lazily, the first time search is opened (not on every page load), so
+     pages that never trigger search pay nothing for it. Matching is a
+     plain case/accent-insensitive substring over title+sub+extra, ranked
+     title-first; deliberately simple, not fuzzy. #}
+  <script>
+  (function () {
+    var root = document.querySelector("[data-search]");
+    if (!root) return;
+    var toggle = root.querySelector("[data-search-toggle]");
+    var panel = root.querySelector("[data-search-panel], #search-panel");
+    var input = root.querySelector("[data-search-input]");
+    var results = root.querySelector("[data-search-results]");
+    var closeBtn = root.querySelector("[data-search-close]");
+    if (!toggle || !panel || !input || !results) return;
+
+    var INDEX_URL = "{{ '/search-index.json' | url }}";
+    var index = null, loading = false, open = false;
+
+    // Fold accents + case so "garcia" matches "García".
+    function norm(s) {
+      return (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    }
+
+    function ensureIndex() {
+      if (index || loading) return;
+      loading = true;
+      fetch(INDEX_URL).then(function (r) { return r.json(); }).then(function (data) {
+        index = data.map(function (it) {
+          return { it: it, hay: norm(it.title + " " + it.sub + " " + it.extra), t: norm(it.title) };
+        });
+        loading = false;
+        if (open && input.value) render(input.value);
+      }).catch(function () { loading = false; });
+    }
+
+    function esc(s) {
+      return s.replace(/[&<>"]/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+      });
+    }
+
+    var LABEL = { research: "Research", person: "People", event: "Events" };
+    var ORDER = ["research", "person", "event"];
+
+    function render(q) {
+      var query = norm(q);
+      if (!query) { results.hidden = true; results.innerHTML = ""; input.setAttribute("aria-expanded", "false"); return; }
+      if (!index) { results.hidden = false; results.innerHTML = '<li class="search-empty">Loading…</li>'; return; }
+
+      var hits = [];
+      for (var i = 0; i < index.length && hits.length < 400; i++) {
+        var e = index[i];
+        if (e.hay.indexOf(query) !== -1) {
+          hits.push({ it: e.it, score: e.t.indexOf(query) === 0 ? 0 : (e.t.indexOf(query) !== -1 ? 1 : 2) });
+        }
+      }
+      hits.sort(function (a, b) { return a.score - b.score; });
+      hits = hits.slice(0, 40);
+
+      if (!hits.length) {
+        results.hidden = false;
+        results.innerHTML = '<li class="search-empty">No matches for “' + esc(q) + '”.</li>';
+        input.setAttribute("aria-expanded", "true");
+        return;
+      }
+
+      var byKind = { research: [], person: [], event: [] };
+      hits.forEach(function (h) { (byKind[h.it.kind] || byKind.research).push(h.it); });
+
+      var html = "";
+      ORDER.forEach(function (kind) {
+        var group = byKind[kind];
+        if (!group.length) return;
+        html += '<li class="search-group" role="presentation">' + LABEL[kind] + "</li>";
+        group.forEach(function (it) {
+          var sub = it.sub ? '<span class="search-hit-sub">' + esc(it.sub) + "</span>" : "";
+          html += '<li role="option"><a class="search-hit" href="' + esc(it.url) + '">' +
+                  '<span class="search-hit-title">' + esc(it.title) + "</span>" + sub + "</a></li>";
+        });
+      });
+      results.innerHTML = html;
+      results.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+    }
+
+    function openSearch(e) {
+      if (e) e.preventDefault();
+      // Opening search closes the mobile menu, so overlays never stack.
+      var nav = document.querySelector("[data-site-nav].is-open");
+      var navBtn = document.querySelector("[data-nav-toggle]");
+      if (nav && navBtn) navBtn.click();
+      open = true;
+      panel.hidden = false;
+      toggle.setAttribute("aria-expanded", "true");
+      root.classList.add("is-open");
+      ensureIndex();
+      // Delay focus one frame so the overlay is laid out first on mobile.
+      requestAnimationFrame(function () { input.focus(); });
+    }
+
+    function closeSearch() {
+      open = false;
+      panel.hidden = true;
+      toggle.setAttribute("aria-expanded", "false");
+      root.classList.remove("is-open");
+      input.value = "";
+      results.hidden = true;
+      results.innerHTML = "";
+    }
+
+    toggle.addEventListener("click", openSearch);
+    if (closeBtn) closeBtn.addEventListener("click", closeSearch);
+    input.addEventListener("input", function () { render(input.value); });
+
+    // Keyboard: "/" opens search from anywhere; Escape closes it.
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && open) { closeSearch(); toggle.focus(); return; }
+      if (e.key === "/" && !open) {
+        var el = document.activeElement, tag = el && el.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA" || (el && el.isContentEditable)) return;
+        openSearch(e);
+      }
+    });
+
+    // Click outside the search panel closes it (desktop dropdown case).
+    document.addEventListener("click", function (e) {
+      if (open && !root.contains(e.target)) closeSearch();
+    });
+  })();
+  </script>
 </body>
 </html>

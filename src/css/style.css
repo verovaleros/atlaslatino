@@ -1024,6 +1024,175 @@ nav.site-nav a[aria-current="page"] {
   color: var(--gray-500);
 }
 
+/* ── Search ────────────────────────────────────────────────────────────
+   Header search: a mono glyph toggle that opens a panel. On desktop the
+   panel is a dropdown anchored under the header's right edge; on narrow
+   screens it becomes a full-width fixed overlay pinned to the top, so the
+   input and results get the whole viewport width instead of being crushed
+   into the wrapped nav. Theme-aware via the same custom properties as the
+   rest of the site — no new colors introduced. */
+/* On desktop .header-top is transparent to layout: wordmark, nav, and
+   search sit on the header's single baseline row exactly as before the
+   wrapper existed. The mobile override below turns it into its own row. */
+.header-top { display: contents; }
+
+/* Header row order on desktop (≥901px): wordmark left, then the nav, then
+   the search glyph at the far right. The search markup sits before the nav
+   in the DOM (so the mobile top row can pair wordmark + ⌕ + ☰), so `order`
+   pushes it past the nav here. Without this, space-between strands the
+   glyph in the gap between the wordmark and the nav. Scoped to desktop so
+   it can't interfere with the stacked mobile header. */
+@media (min-width: 901px) {
+  nav.site-nav { order: 1; margin-left: auto; }
+  .search { order: 2; }
+}
+
+/* Hamburger button — hidden on desktop, shown on mobile by the media
+   query. The three bars are one element plus two pseudo-elements. */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 8px 4px;
+  line-height: 0;
+}
+.nav-toggle-bars,
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--gray-700);
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+.nav-toggle-bars { position: relative; }
+.nav-toggle-bars::before,
+.nav-toggle-bars::after { content: ""; position: absolute; left: 0; }
+.nav-toggle-bars::before { top: -7px; }
+.nav-toggle-bars::after { top: 7px; }
+.nav-toggle:hover .nav-toggle-bars,
+.nav-toggle:hover .nav-toggle-bars::before,
+.nav-toggle:hover .nav-toggle-bars::after { background: var(--ink); }
+/* Open state: bars morph into an ✕. */
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars { background: transparent; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars::before { top: 0; transform: rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars::after { top: 0; transform: rotate(-45deg); }
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+}
+
+/* The toggle is an <a> to /browse/ so it still does something useful with
+   JS off; JS turns it into an overlay opener. Sized to sit on the nav
+   baseline next to the links. */
+.search-toggle {
+  font-family: var(--font-mono);
+  color: var(--gray-700);
+  text-decoration: none;
+  line-height: 1;
+  padding: 2px 4px;
+  border-bottom: 1px solid transparent;
+}
+.search-toggle:hover { color: var(--ink); }
+.search-icon { font-size: 20px; }
+
+.search-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  width: min(440px, 80vw);
+  background: var(--panel);
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  z-index: 50;
+  overflow: hidden;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--gray-300);
+}
+.search-box-icon {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--gray-500);
+  line-height: 1;
+}
+.search-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  padding: 4px 0;
+}
+.search-input::placeholder { color: var(--gray-500); }
+.search-input:focus { outline: none; }
+.search-close {
+  background: transparent;
+  border: 0;
+  color: var(--gray-500);
+  font-size: 15px;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+}
+.search-close:hover { color: var(--ink); }
+
+.search-results {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  max-height: min(60vh, 460px);
+  overflow-y: auto;
+}
+.search-group {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  padding: 10px 14px 4px;
+}
+.search-group:first-child { padding-top: 4px; }
+.search-hit {
+  display: block;
+  padding: 7px 14px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.search-hit:hover,
+.search-hit:focus { background: var(--accent-wash); outline: none; }
+.search-hit-title {
+  display: block;
+  font-size: 14px;
+  line-height: 1.35;
+}
+.search-hit-sub {
+  display: block;
+  font-size: 12.5px;
+  color: var(--gray-500);
+  margin-top: 1px;
+}
+.search-empty {
+  padding: 14px;
+  color: var(--gray-500);
+  font-size: 14px;
+}
+
+/* Mobile: full-width overlay pinned to the top of the viewport. The panel
+   leaves the header's flow (position: fixed) so it isn't boxed inside the
+   wrapped nav row, and spans edge to edge for a real tap target. */
+
 @media (max-width: 760px) {
   .event-list { grid-template-columns: 1fr; }
 }
@@ -1189,20 +1358,36 @@ footer.site {
   padding: 52px 0 76px;
 }
 
+/* Tagline followed by the action link(s). Left-aligned with a comfortable
+   gap rather than space-between, so with a single link the two don't fling
+   to opposite edges leaving a dead void between them. The links live in
+   their own group so more can be added later (e.g. a sponsorship link)
+   without changing this layout. */
 .footer-body {
   display: flex;
-  justify-content: space-between;
+  align-items: baseline;
   flex-wrap: wrap;
-  gap: 14px 32px;
+  gap: 12px 44px;
   font-family: var(--font-mono);
   font-size: 12.5px;
   color: var(--gray-500);
+}
+
+.footer-tagline { max-width: 40ch; }
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
 }
 
 .footer-body a {
   color: var(--gray-700);
   text-decoration: none;
   border-bottom: 1px solid var(--gray-300);
+  /* Underline hugs the text width, so a stacked link never reads as a
+     full-width divider rule. */
+  align-self: start;
 }
 
 .footer-body a:hover { color: var(--accent); border-color: var(--accent); }
@@ -1213,27 +1398,64 @@ footer.site {
   :root { --rail-w: 196px; --rail-gap: 44px; }
 }
 
+/* ---------- Mobile ---------- */
+
+/* At 900px the layout narrows: rail shrinks, and — the key change — the
+   nav collapses to a hamburger as soon as the 7 inline links stop fitting,
+   well before the phone-width 640px breakpoint. Below this width the header
+   stacks: a top row (wordmark, then ⌕ and ☰), with the nav revealed as a
+   full-width stacked drawer only when the hamburger is open. Grouped here
+   because the trigger is "links don't fit", which happens around 900px. */
 @media (max-width: 900px) {
   :root { --rail-w: 172px; --rail-gap: 36px; --shell-pad: 26px; }
   .entry-title { max-width: none; }
   .person-photo { width: 100px; height: 100px; }
-}
 
-/* ---------- Mobile ---------- */
+  header.site {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .search { margin-left: auto; }
+  .search-icon { font-size: 22px; }
+  .nav-toggle { display: block; }
+
+  nav.site-nav {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    font-size: 14px;
+    width: 100%;
+    border-top: 1px solid var(--gray-300);
+    margin-top: 4px;
+  }
+  nav.site-nav.is-open { display: flex; }
+  nav.site-nav a {
+    padding: 13px 2px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  /* Underline-on-current doesn't read well as a full-width row; use a left
+     accent bar instead so the active page is still clear. */
+  nav.site-nav a[aria-current="page"] {
+    border-bottom-color: var(--gray-200);
+    box-shadow: inset 2px 0 0 var(--accent);
+    padding-left: 10px;
+  }
+}
 
 @media (max-width: 640px) {
   :root { --rail-w: 100%; --rail-gap: 0px; --shell-pad: 18px; }
 
   body { font-size: 16px; }
 
-  header.site {
-    padding: 30px 0 20px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-  }
-
-  nav.site-nav { gap: 20px; font-size: 12.5px; flex-wrap: wrap; }
+  header.site { padding: 30px 0 20px; }
 
   .person-head,
   .event-head,
@@ -1319,7 +1541,7 @@ footer.site {
   .pager-position { order: 3; width: 100%; }
 
   footer.site { padding: 34px 0 48px; }
-  .footer-body { flex-direction: column; gap: 8px; }
+  .footer-body { flex-direction: column; gap: 14px; }
 }
 
 @media (max-width: 400px) {
@@ -1329,4 +1551,21 @@ footer.site {
   .entry--no-person .entry-title { font-size: 17px; }
   /* tighten tracking too — 0.3em on a narrow screen would wrap the mark */
   .wordmark { font-size: 14px; letter-spacing: 0.22em; text-indent: 0.22em; }
+}
+
+@media (max-width: 640px) {
+  .search-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+  }
+  .search-box { padding: 14px 16px; }
+  .search-input { font-size: 16px; } /* 16px avoids iOS zoom-on-focus */
+  .search-results { max-height: calc(100vh - 60px); max-height: calc(100dvh - 60px); }
 }
