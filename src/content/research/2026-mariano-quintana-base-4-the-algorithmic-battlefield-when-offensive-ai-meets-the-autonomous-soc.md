@@ -10,3 +10,4 @@ links:
   - label: "View official schedule"
     url: https://ekoparty.org/schedule-miami-2026/
 ---
+_No abstract was found on the conference website._
