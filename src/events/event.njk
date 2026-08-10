@@ -22,7 +22,7 @@ eleventyComputed:
   <div>
     <h1>{{ eventItem.data.name }}</h1>
     {% if eventItem.data.url %}
-      <p class="person-links"><a href="{{ eventItem.data.url }}">Event website</a></p>
+      <p class="person-links"><a href="{{ eventItem.data.url }}" target="_blank" rel="noopener">Event website</a></p>
     {% endif %}
   </div>
 </div>

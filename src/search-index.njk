@@ -25,7 +25,12 @@ eleventyExcludeFromCollections: true
     {%- set names = (names.push(ext.name), names) -%}
   {%- endfor -%}
   {%- set ev = events | findBySlug(entry.data.event) -%}
-  {%- set url = (("/events/" + ev.slug + "/") | url) if ev else ("/" | url) -%}
+  {#- Research entries have no page of their own; they render on the event
+      page (all on one page) when there is an event, else on the paginated
+      home feed. Append #<slug> so the result jumps to that exact entry —
+      each feed-item carries id="<slug>" and a small script auto-opens it. -#}
+  {%- set base = ("/events/" + ev.slug + "/") if ev else "/" -%}
+  {%- set url = ((base ~ "#" ~ entry.slug) | url) -%}
   {%- if not first %},{% endif -%}{%- set first = false -%}
 {"kind":"research","title":{{ entry.data.title | dump | safe }},"sub":{{ (names | join(" · ")) | dump | safe }},"extra":{{ ((ev.data.name if ev else "") ~ " " ~ (entry.data.field | fieldLabel) ~ " " ~ (entry.data.type | typeLabel)) | dump | safe }},"url":{{ url | dump | safe }}}
 {%- endfor -%}

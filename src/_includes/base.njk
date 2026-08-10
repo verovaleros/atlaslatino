@@ -78,6 +78,28 @@
     </footer>
   </div>
 
+  {# When a page is opened with a #<entry-slug> (e.g. from a search result
+     that links to a talk on its event page), open that entry's <details>
+     and scroll it into view. Without this, the browser jumps to the
+     collapsed row and the user still has to find and expand it. Runs on
+     load and on hash changes (clicking a second result without reloading). #}
+  <script>
+  (function () {
+    function openTarget() {
+      var id = decodeURIComponent((location.hash || "").slice(1));
+      if (!id) return;
+      var el = document.getElementById(id);
+      if (!el) return;
+      var d = el.querySelector("details") || (el.tagName === "DETAILS" ? el : null);
+      if (d) d.open = true;
+      el.scrollIntoView({ block: "start" });
+    }
+    window.addEventListener("hashchange", openTarget);
+    // Defer one frame so layout (and any just-opened details) is settled.
+    requestAnimationFrame(openTarget);
+  })();
+  </script>
+
   {# Mobile nav toggle. The button starts hidden (attribute); this script
      unhides it, so with JS off it never appears and the nav stays open.
      Opening search closes the menu and vice-versa, so the two overlays

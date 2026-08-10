@@ -23,7 +23,7 @@
     hideEvent    - optional bool; when true, don't show the event line
                    (used on an event's own page, where it's redundant)
 #}
-<li>
+<li id="{{ entry.slug }}">
   <details class="entry{% if hidePerson %} entry--no-person{% endif %}">
     <summary>
       <span class="rail">
