@@ -1,6 +1,7 @@
 ---
-name: Jaime Restrepo
+name: Jaime Andrés Restrepo
 country: CO
+affiliation: DragonJAR
 links:
   website: https://www.dragonjar.org
 ---

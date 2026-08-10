@@ -2,7 +2,7 @@
 title: "I know kung fu"
 date: "2026-05-22"
 people:
-  - co-andres-restrepo
+  - co-jaime-restrepo
 event: "ekoparty-miami-2026"
 field: "appsec-supply-chain"
 type: "talk"
