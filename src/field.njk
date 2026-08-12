@@ -18,6 +18,7 @@ eleventyComputed:
     <span class="count">— {{ fp.totalEntries }} {{ "entry" if fp.totalEntries == 1 else "entries" }}</span>
   </h2>
   <div class="intro-links">
+    <a href="{{ (fp.basePath + 'people/') | url }}">View people →</a>
     <a href="{{ '/browse/' | url }}">← All filters</a>
   </div>
 </div>
